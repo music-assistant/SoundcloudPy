@@ -1,14 +1,18 @@
-# soundcloud-py
+# Soundcloud python async client
 
-Soundcloud API Wrapped for Python, simple and with only 1 file
+Async client for connecting to the Soundcloud API.
 
 This is a Wrapped API that it is used from soundcloud web browser, its is subjected to changes and `NOT OFFICIAL`
 
+This package is based on soundcloudpy from Naím Rodríguez https://github.com/naim-prog
+Original package https://github.com/naim-prog/soundcloud-py
+
 ## Installation
 
-1. For installation see use requirements.txt for installation packages
-2. Get the O-Auth from soundcloud headers
-3. Get the Client id from soundcloud URL's
+The package is published on PyPI and can be installed by running:
+```
+pip install soundcloudpy
+```
 
 ## How to get O-Auth and Client id
 
@@ -33,25 +37,28 @@ python -m example --client_id jHvc9wa0Ejf092wj3f3920w3F920as02 --auth_token 'O-A
 
 * Own account details
 * User public details
-* Own followers
+* Own following
+* Who to follow
 * Last tracks reproduced info
 * User profiles from tracks likes
 * Track details
 * Tracks liked
-* Like a track
-* Unlike a track
-* Repost a track
-* Unrepost a track
+* Tracks by genre recent
+* Tracks by genre popular
+* Popular track from user
 * Own playlists
 * Playlists details
-* Create a playlist
-* Delete a playlist
+* Playlists by genre
+* Playlists from user
 * Recommended tracks of a track
-* Strem URL's of a track (you can use it to reproduce the audio in VLC for example)
+* Stream URL's of a track (you can use it to reproduce the audio in VLC for example)
 * Comments of a track
 * Get mixed selection of playlists
-* Get related artists
-* Get unread conversations
+* Search
+* Subscribe feed
+* Albums from user
+* All feed from user
+
 
 ## DISCLAIMER
 

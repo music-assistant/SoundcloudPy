@@ -14,22 +14,22 @@ The package is published on PyPI and can be installed by running:
 pip install soundcloudpy
 ```
 
-## How to get O-Auth and Client id
+## How to get OAuth and Client id
 
 1. Go to [soundcloud](https://soundcloud.com) and login in
 2. Open the "Inspect" tool (F12 on most browsers)
 3. Refresh the page
 4. Go to the page "Network" on the inspect terminal
-5. Search on the column "File" for the "client_id" and "Request headers" for "Authorization"
+5. Search on the column "File" for the "client_id" and the "oauth_token" cookie for "Authorization"
 
 `client_id`: string of 32 bytes alphanumeric
 
-`authorization`: string that begins with O-Auth and a string (the o-auth token is "O-Auth . . .")
+`authorization`: string that begins with OAuth and a string (the o-auth token is "OAuth . . .")
 
-Example (O-Auth and client_id are NOT real, use yours):
+Example (OAuth and client_id are NOT real, use yours):
 
 ```
-python -m example --client_id jHvc9wa0Ejf092wj3f3920w3F920as02 --auth_token 'O-Auth 3-26432-21446-asdif2309fj'
+python -m example --client_id jHvc9wa0Ejf092wj3f3920w3F920as02 --auth_token 'OAuth 3-26432-21446-asdif2309fj'
 ```
 
 

@@ -9,14 +9,14 @@ repos:
         types: [python]
         entry: scripts/run-in-env.sh ruff check --fix
         require_serial: true
-        stages: [commit, push, manual]
+        stages: [pre-commit, pre-push, manual]
       - id: ruff-format
         name: 🐶 Ruff Formatter
         language: system
         types: [python]
         entry: scripts/run-in-env.sh ruff format
         require_serial: true
-        stages: [commit, push, manual]
+        stages: [pre-commit, pre-push, manual]
       - id: check-ast
         name: 🐍 Check Python AST
         language: system
@@ -36,7 +36,7 @@ repos:
         language: system
         types: [text, executable]
         entry: scripts/run-in-env.sh check-executables-have-shebangs
-        stages: [commit, push, manual]
+        stages: [pre-commit, pre-push, manual]
       # - id: check-merge-conflict
       #   name: 💥 Check for merge conflicts
       #   language: system

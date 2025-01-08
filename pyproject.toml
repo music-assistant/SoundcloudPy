@@ -1,6 +1,6 @@
 [project]
 name = "soundcloudpy"
-version = "1.0.0"
+version = "1.0.1"
 license = { text = "Apache-2.0" }
 description = "Client for async connection to the Soundcloud api."
 readme = "README.md"
@@ -13,8 +13,9 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
-dependencies = ["aiohttp>=3.8.4"]
+dependencies = ["aiohttp>=3.11.11"]
 
 [project.optional-dependencies]
 # speedups = [
@@ -24,18 +25,18 @@ dependencies = ["aiohttp>=3.8.4"]
 #   "orjson>=3.8.9",
 # ]
 test = [
-  "black==24.2.0",
-  "codespell==2.2.6",
+  "black==24.10.0",
+  "codespell==2.3.0",
   "isort==5.13.2",
-  "mypy==1.8.0",
-  "pre-commit==3.6.1",
-  "pre-commit-hooks==4.5.0",
-  "pylint==3.0.3",
-  "pytest==8.0.0",
+  "mypy==1.14.1",
+  "pre-commit==4.0.1",
+  "pre-commit-hooks==5.0.0",
+  "pylint==3.3.3",
+  "pytest==8.3.4",
   "pytest-aiohttp==1.0.5",
-  "pytest-cov==4.1.0",
-  "ruff==0.2.1",
-  "safety==3.0.1",
+  "pytest-cov==6.0.0",
+  "ruff==0.8.5",
+  "safety==3.2.14",
 ]
 
 [tool.codespell]

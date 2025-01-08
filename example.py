@@ -54,6 +54,11 @@ async def connect(args: argparse.Namespace, session: ClientSession) -> None:
         tracks.append(item)
     LOGGER.info("Tracks: %s", tracks)
 
+    track_details = []
+    async for item in soundcloud.get_track_details_liked(me["id"]):
+        track_details.append(item)
+    LOGGER.info("Track details: %s", track_details)
+
     stream_url = await soundcloud.get_stream_url(tracks[0])
     LOGGER.info("Stream url for track %s: %r", tracks[0], stream_url)
 

@@ -128,7 +128,7 @@ class SoundcloudAsyncAPI:
             headers=self.headers,
         )
 
-    async def get_tracks_liked(self, limit: int = 0) -> AsyncGenerator[list[dict[str, Any]], None]:
+    async def get_tracks_liked(self, limit: int = 0) -> AsyncGenerator[dict[str, Any], None]:
         """Obtain the authenticated user's liked tracks.
 
         :param limit: number of tracks to get. if 0, will fetch all tracks.
@@ -149,6 +149,27 @@ class SoundcloudAsyncAPI:
                 return
 
             yield track
+
+    async def get_track_details_liked(
+        self, user_id: str, limit: int = 0
+    ) -> AsyncGenerator[list[dict[str, Any]], None]:
+        """Obtain the authenticated user's liked tracks with details.
+
+        :param limit: number of tracks to get. if 0, will fetch all tracks.
+        :returns: list of track ids liked by the current user
+        """
+        query_limit = limit
+        if query_limit == 0:
+            query_limit = 100
+
+        num_items = 0
+        async for track in self._paginated_query(
+            f"/users/{user_id}/track_likes", params={"limit": str(query_limit)}
+        ):
+            num_items += 1
+            if num_items >= limit > 0:
+                return
+            yield track["track"]
 
     async def get_track_by_genre_recent(self, genre: str, limit: int = 10) -> dict[str, Any]:
         """Get track by genre recent.
@@ -202,11 +223,13 @@ class SoundcloudAsyncAPI:
 
     # ---------------- PLAYLISTS ----------------
 
-    async def get_account_playlists(self) -> AsyncGenerator[list[dict[str, Any]], None]:
+    async def get_account_playlists(self) -> AsyncGenerator[dict[str, Any], None]:
         """Get account playlists, albums and stations."""
         # NOTE: This returns all track lists in reverse chronological order (most recent first).
         async for playlist in self._paginated_query("/me/library/all"):
-            yield playlist
+            # Skip some kind of system playlists, they have a different structure.
+            if "playlist" in playlist:
+                yield playlist
 
     async def get_playlist_details(self, playlist_id: str) -> dict[str, Any]:
         """:param playlist_id: playlist id"""
@@ -337,7 +360,7 @@ class SoundcloudAsyncAPI:
         self,
         path: str,
         params: dict[str, str] | None = None,
-    ) -> AsyncGenerator[list[dict[str, Any]], None]:
+    ) -> AsyncGenerator[dict[str, Any], None]:
         """Paginate response queries.
 
         Soundcloud paginates its queries using the same pattern. As such, we leverage the
@@ -365,7 +388,11 @@ class SoundcloudAsyncAPI:
                 yield item
 
             # Handle case when results requested exceeds number of actual results.
-            if int(params.get("limit", 0)) and len(response["collection"]) < int(params["limit"]):
+            if (
+                int(params.get("limit", 0))
+                and len(response["collection"]) < int(params["limit"])
+                and "next_href" not in response
+            ):
                 return
 
             try:

@@ -273,20 +273,41 @@ class SoundcloudAsyncAPI:
             headers=self.headers,
         )
 
-    async def get_stream_url(self, track_id: str) -> Any | None:
-        """:param track_id: track id"""
+    async def get_stream_url(self, track_id: str, presets: list[str] | None = None) -> Any | None:
+        """Get stream URL for a track.
+
+        :param track_id: track id
+        :param presets: list of preferred audio formats (e.g., ['mp3', 'hls'])
+        :return: stream URL or None if not found
+        """
+        if presets is None:
+            presets = ["mp3"]
         full_json = await self.get_track_details(track_id)
         if full_json and isinstance(full_json, list):
             track_info = full_json[0]
-            media_url = track_info["media"]["transcodings"][0]["url"]
             track_auth = track_info["track_authorization"]
-            stream_url = f"{media_url}?client_id={self.client_id}&track_authorization={track_auth}"
-            req = await self.get(
-                stream_url,
-                headers=self.headers,
-            )
 
-            return dict(req).get("url")
+            # Loop through all available transcodings until we find a valid URL
+            for transcoding in track_info["media"]["transcodings"]:
+                # Skip transcodings that are not in the specified presets
+                if not any(transcoding.get("preset").startswith(preset) for preset in presets):
+                    continue
+
+                media_url = transcoding["url"]
+                stream_url = (
+                    f"{media_url}?client_id={self.client_id}&track_authorization={track_auth}"
+                )
+                req = await self.get(
+                    stream_url,
+                    headers=self.headers,
+                )
+
+                # Check if we got a valid response with a URL
+                if isinstance(req, dict) and "url" in req:
+                    return req["url"]
+
+            # Return None if no valid URL was found after trying all transcodings
+            return None
         else:
             return None
 

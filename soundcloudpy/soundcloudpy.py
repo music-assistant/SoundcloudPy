@@ -11,14 +11,14 @@ from typing import TYPE_CHECKING
 
 from .const import BASE_URL
 
+# Standard length of a SoundCloud client ID
+CLIENT_ID_LENGTH = 32
+
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
     from typing import Any
 
     from aiohttp.client import ClientSession
-
-# TODO: Fix docstring
-# TODO: Add annotations
 
 
 class SoundcloudAsyncAPI:
@@ -48,7 +48,7 @@ class SoundcloudAsyncAPI:
 
     async def login(self) -> None:
         """Login to soundcloud."""
-        if len(self.client_id) != 32:
+        if len(self.client_id) != CLIENT_ID_LENGTH:
             msg = "Not valid client id"
             raise ValueError(msg)
 
@@ -142,7 +142,8 @@ class SoundcloudAsyncAPI:
 
         num_items = 0
         async for track in self._paginated_query(
-            "/me/track_likes/ids", params={"limit": str(query_limit)}
+            "/me/track_likes/ids",
+            params={"limit": str(query_limit)},
         ):
             num_items += 1
             if num_items >= limit > 0:
@@ -151,7 +152,9 @@ class SoundcloudAsyncAPI:
             yield track
 
     async def get_track_details_liked(
-        self, user_id: str, limit: int = 0
+        self,
+        user_id: str,
+        limit: int = 0,
     ) -> AsyncGenerator[list[dict[str, Any]], None]:
         """Obtain the authenticated user's liked tracks with details.
 
@@ -164,7 +167,8 @@ class SoundcloudAsyncAPI:
 
         num_items = 0
         async for track in self._paginated_query(
-            f"/users/{user_id}/track_likes", params={"limit": str(query_limit)}
+            f"/users/{user_id}/track_likes",
+            params={"limit": str(query_limit)},
         ):
             num_items += 1
             if num_items >= limit > 0:
@@ -265,15 +269,14 @@ class SoundcloudAsyncAPI:
         )
 
     # ---------------- MISCELLANEOUS ----------------
-
     async def get_recommended(self, track_id: str, limit: int = 10) -> dict[str, Any]:
         """:param track_id: track id to get recommended tracks from this"""
         return await self.get(
-            f"{BASE_URL}/tracks/{track_id}/related?client_id={self.client_id}",
+            f"{BASE_URL}/tracks/{track_id}/related?client_id={self.client_id}&limit={limit}",
             headers=self.headers,
         )
 
-    async def get_stream_url(self, track_id: str, presets: list[str] | None = None) -> Any | None:
+    async def get_stream_url(self, track_id: str, presets: list[str] | None = None) -> str | None:
         """Get stream URL for a track.
 
         :param track_id: track id
@@ -308,8 +311,7 @@ class SoundcloudAsyncAPI:
 
             # Return None if no valid URL was found after trying all transcodings
             return None
-        else:
-            return None
+        return None
 
     async def get_comments_track(self, track_id: str, limit: int = 100) -> dict[str, Any]:
         """Get track comments.

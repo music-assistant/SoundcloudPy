@@ -1,6 +1,6 @@
 [project]
 name = "soundcloudpy"
-version = "0.0.0"
+version = "0.1.3"
 license = { text = "Apache-2.0" }
 description = "Client for async connection to the Soundcloud api."
 readme = "README.md"

@@ -44,19 +44,13 @@ async def connect(args: argparse.Namespace, session: ClientSession) -> None:
     artists = [artist["username"] for artist in following["collection"]]
     LOGGER.info("Following: %s", artists)
 
-    playlists = []
-    async for item in soundcloud.get_account_playlists():
-        playlists.append(item["playlist"]["title"])
+    playlists = [item["playlist"]["title"] async for item in soundcloud.get_account_playlists()]
     LOGGER.info("Playlists: %s", playlists)
 
-    tracks = []
-    async for item in soundcloud.get_tracks_liked():
-        tracks.append(item)
+    tracks = [item async for item in soundcloud.get_tracks_liked()]
     LOGGER.info("Tracks: %s", tracks)
 
-    track_details = []
-    async for item in soundcloud.get_track_details_liked(me["id"]):
-        track_details.append(item)
+    track_details = [item async for item in soundcloud.get_track_details_liked(me["id"])]
     LOGGER.info("Track details: %s", track_details)
 
     stream_url = await soundcloud.get_stream_url(tracks[0])

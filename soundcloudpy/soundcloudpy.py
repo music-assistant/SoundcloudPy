@@ -235,6 +235,14 @@ class SoundcloudAsyncAPI:
             if "playlist" in playlist:
                 yield playlist
 
+    async def get_system_playlist_details(self, playlist_id: str) -> dict[str, Any]:
+        """Get system playlist details, those created by Soundcloud."""
+        return await self.get(
+            f"{BASE_URL}/system-playlists/{playlist_id}?"
+            f"representation=full&client_id={self.client_id}",
+            headers=self.headers,
+        )
+
     async def get_playlist_details(self, playlist_id: str) -> dict[str, Any]:
         """:param playlist_id: playlist id"""
         return await self.get(

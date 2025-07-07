@@ -56,6 +56,12 @@ async def connect(args: argparse.Namespace, session: ClientSession) -> None:
     stream_url = await soundcloud.get_stream_url(tracks[0])
     LOGGER.info("Stream url for track %s: %r", tracks[0], stream_url)
 
+    mixed = await soundcloud.get_mixed_selection(10)
+    LOGGER.info("Mixed selection: %s", mixed)
+
+    feed = await soundcloud.get_subscribe_feed(10)
+    LOGGER.info("Subscribe feed: %s", feed)
+
 
 def main() -> None:
     """Run main."""
